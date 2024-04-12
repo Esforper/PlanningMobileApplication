@@ -48,7 +48,10 @@ class _DailyReportPageState extends State<DailyReportPage> {
     final newActivity = await showDialog<Activity>(
       context: context,
       builder: (BuildContext context) {
+        String description = "belirtilmemiş";
+        String title = "belirtilmemiş";
         return AlertDialog(
+          //popup ekran için
           title: Text('Yeni Aktivite Ekle'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -58,8 +61,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
                   labelText: 'Başlık',
                 ),
                 onChanged: (value) {
-                  // Başlık alanındaki değişiklikleri takip etmek için gerekiyor.
-                  // Şu anlık bir işlem yapmıyoruz.
+                  title = value;
                 },
               ),
               TextField(
@@ -67,8 +69,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
                   labelText: 'Açıklama',
                 ),
                 onChanged: (value) {
-                  // Açıklama alanındaki değişiklikleri takip etmek için gerekiyor.
-                  // Şu anlık bir işlem yapmıyoruz.
+                  description = value;
                 },
               ),
             ],
@@ -82,16 +83,18 @@ class _DailyReportPageState extends State<DailyReportPage> {
             ),
             TextButton(
               onPressed: () {
-                final newActivity = Activity(
-                  id: UniqueKey().toString(),
-                  title: 'Başlık', // Burada başlık metni girişini almalısınız
-                  description: 'Açıklama', // Burada açıklama metni girişini almalısınız
-                  createdAt: DateTime.now(),
-                );
+                if(title != null && description != null){
+                  final newActivity = Activity(
+                    id: UniqueKey().toString(),
+                    title: title, // Burada başlık metni girişini almalısınız
+                    description: description, // Burada açıklama metni girişini almalısınız
+                    createdAt: DateTime.now(),
+                  );
 
-                setState(() {
-                  _activities.add(newActivity);
-                });
+                  setState(() {
+                    _activities.add(newActivity);
+                  });
+                }
 
                 Navigator.of(context).pop();
               },
@@ -103,6 +106,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
     );
   }
 
+  //ana sayfa tasarımı
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,6 +134,8 @@ class _DailyReportPageState extends State<DailyReportPage> {
                   title: Text(_activities[index].title),
                   // Aktiviteye tıklanınca düzenleme yapmak için
                   onTap: () {
+                    String title = _activities[index].title;
+                    String description = _activities[index].description;
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -138,17 +144,17 @@ class _DailyReportPageState extends State<DailyReportPage> {
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Textbox1 Alanı'),
+                              Text("Başlık"),
                               TextField(
                                 decoration: InputDecoration(
-                                  hintText: 'Textbox1',
+                                  hintText: title,
                                 ),
                               ),
                               SizedBox(height: 10),
-                              Text('Textbox2 Alanı'),
+                              Text("Açıklama"),
                               TextField(
                                 decoration: InputDecoration(
-                                  hintText: 'Textbox2',
+                                  hintText: description,
                                 ),
                               ),
                             ],
