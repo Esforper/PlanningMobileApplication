@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'utils/barrel.dart';
 
 void main() {
   runApp(MyApp());
-}
-
-class Activity {
-  String id;
-  String title;
-  String description;
-  DateTime createdAt;
-
-  Activity({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.createdAt,
-  });
 }
 
 class MyApp extends StatelessWidget {
@@ -32,6 +19,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//statik olmayan widget anlamında yüksek ihtimalle
 class DailyReportPage extends StatefulWidget {
   @override
   _DailyReportPageState createState() => _DailyReportPageState();
@@ -44,6 +32,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
 
   List<Activity> _activities = [];
 
+  //yeni aktivite ekleme kısmı
   void _addActivity() async {
     final newActivity = await showDialog<Activity>(
       context: context,
