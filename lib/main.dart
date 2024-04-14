@@ -19,20 +19,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//statik olmayan widget anlamında yüksek ihtimalle
 class DailyReportPage extends StatefulWidget {
   @override
   _DailyReportPageState createState() => _DailyReportPageState();
 }
 
-//baslik saatini düzenle
 String date1 = DateFormat("yyyy-MM-dd").format(DateTime.now());
 class _DailyReportPageState extends State<DailyReportPage> {
   String _currentDate = date1;
 
   List<Activity> _activities = [];
 
-  //yeni aktivite ekleme kısmı
   void _addActivity() async {
     final newActivity = await showDialog<Activity>(
       context: context,
@@ -40,7 +37,6 @@ class _DailyReportPageState extends State<DailyReportPage> {
         String description = "belirtilmemiş";
         String title = "belirtilmemiş";
         return AlertDialog(
-          //popup ekran için
           title: Text('Yeni Aktivite Ekle'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -75,8 +71,8 @@ class _DailyReportPageState extends State<DailyReportPage> {
                 if(title != null && description != null){
                   final newActivity = Activity(
                     id: UniqueKey().toString(),
-                    title: title, // Burada başlık metni girişini almalısınız
-                    description: description, // Burada açıklama metni girişini almalısınız
+                    title: title,
+                    description: description,
                     createdAt: DateTime.now(),
                   );
 
@@ -95,7 +91,6 @@ class _DailyReportPageState extends State<DailyReportPage> {
     );
   }
 
-  //ana sayfa tasarımı
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,7 +116,6 @@ class _DailyReportPageState extends State<DailyReportPage> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(_activities[index].title),
-                  // Aktiviteye tıklanınca düzenleme yapmak için
                   onTap: () {
                     String title = _activities[index].title;
                     String description = _activities[index].description;
@@ -129,7 +123,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Popup'),
+                          title: Text('Aktivite Düzenleme'),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -153,7 +147,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('Close'),
+                              child: Text('Kapat'),
                             ),
                           ],
                         );
@@ -165,6 +159,41 @@ class _DailyReportPageState extends State<DailyReportPage> {
             ),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Menü',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Ana Sayfa'),
+              onTap: () {
+                // Ana sayfaya yönlendirme yapılabilir
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Ayarlar'),
+              onTap: () {
+                // Ayarlar sayfasına yönlendirme yapılabilir
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addActivity,
